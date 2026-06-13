@@ -45,13 +45,58 @@ When we apply an active high signal to the signal pin of the relay module from a
  
 # PROGRAM:
 
+#include <LiquidCrystal.h>
 
+LiquidCrystal lcd(7, 8, 9, 10, 11, 12);
+
+const int ldrPin = A0;
+const int tempPin = A1;
+const int buttonPin = 2;
+const int ledPin = 3;
+const int buzzerPin = 6;
+
+void setup() {
+  pinMode(buttonPin, INPUT);
+  pinMode(ledPin, OUTPUT);
+  pinMode(buzzerPin, OUTPUT);
+
+  lcd.begin(16, 2);
+}
+
+void loop() {
+  int lightValue = analogRead(ldrPin);
+  int tempValue = analogRead(tempPin);
+
+  float voltage = tempValue * (5.0 / 1023.0);
+  float temperatureC = (voltage - 0.5) * 100;
+
+  lcd.setCursor(0,0);
+  lcd.print("Light:");
+  lcd.print(lightValue);
+
+  lcd.setCursor(0,1);
+  lcd.print("Temp:");
+  lcd.print(temperatureC);
+
+  // Button-controlled LED + buzzer
+  if (digitalRead(buttonPin) == HIGH) {
+    digitalWrite(ledPin, HIGH);
+    tone(buzzerPin, 1000);
+  } else {
+    digitalWrite(ledPin, LOW);
+    noTone(buzzerPin);
+  }
+
+  delay(500);
+}
  
 # Output:
+
+<img width="1485" height="783" alt="516727474-54ee61d5-4647-43bf-ae56-557e1ef92ba0" src="https://github.com/user-attachments/assets/81dde4d5-d707-4033-bd77-934a8bc56d9b" />
 
 
 
 ## Result:
 
-
+The home automation circuit was successfully simulated in Tinkercad. The LDR and temperature sensor provided real-time light and temperature readings, which were correctly displayed on the LCD. The push button activated the LED and buzzer as expected. All components functioned properly, demonstrating a working prototype of a basic home automation system.
 
